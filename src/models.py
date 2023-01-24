@@ -8,6 +8,16 @@ from eralchemy2 import render_er
 
 Base = declarative_base()
 
+
+# #bien
+class Seguidores(Base):
+    __tablename__ = 'seguidores'
+    # Here we define columns for the table person
+    # Notice that each column is also a normal Python instance attribute.
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('usuario.id'))
+    
+    # # bien
 class Usuario(Base):
     __tablename__ = 'usuario'
     # Here we define columns for the table person
@@ -16,44 +26,37 @@ class Usuario(Base):
     nombre = Column(String(250), nullable=False)
     apellido = Column(String(250), nullable=False)
     email = Column(String(250), nullable=False)
-
-
-class Favoritos(Base):
-    __tablename__ = 'favoritos'
-    # Here we define columns for the table person
-    # Notice that each column is also a normal Python instance attribute.
-    id = Column(Integer, primary_key=True)
-    personajes_id = Column(Integer, ForeignKey('personajes.id'))
-    vehiculos_id = Column(Integer, ForeignKey('vehiculos.id'))
-    planetas_id = Column(Integer, ForeignKey('planetas.id'))
-    usuario_id = Column(Integer, ForeignKey('usuario.id'))
-
-class Planetas(Base):
-    __tablename__ = 'planetas'
-    # Here we define columns for the table person
-    # Notice that each column is also a normal Python instance attribute.
-    id = Column(Integer, primary_key=True)
-    climate = Column(String (250))
-    created = Column(String (250))
-    diameter = Column(String (250))
+    seguidores = relationship("seguidores", backref="seguidores")
     
-class Vehiculos(Base):
-    __tablename__ = 'vehiculos'
-    # Here we define columns for the table person
-    # Notice that each column is also a normal Python instance attribute.
-    id = Column(Integer, primary_key=True)
-    cargo_capacity = Column(String (250))
-    consumables = Column(String (250))
-    cost_in_credits = Column(String (250))
 
-class Personajes(Base):
-    __tablename__ = 'personajes'
+class Medios(Base):
+    __tablename__ = 'medios'
     # Here we define columns for the table person
     # Notice that each column is also a normal Python instance attribute.
     id = Column(Integer, primary_key=True)
-    name = Column(String (250))
-    skin_color = Column(String (250))
-    species = Column(String (250))
+    type = Column(String, ForeignKey('type.id'))
+    url = Column(String, ForeignKey('url.id'))
+    post_id = Column(Integer, ForeignKey('post.id'))
+    
+class Comment(Base):
+    __tablename__ = 'coments'
+    # Here we define columns for the table person
+    # Notice that each column is also a normal Python instance attribute.
+    id = Column(Integer, primary_key=True)
+    comment_text = Column(String (250))
+    autor_id = Column(Integer, ForeignKey('usuario.id'))
+    post_id = Column(Integer, ForeignKey('post.id'))
+
+class Post(Base):
+    __tablename__ = 'post'
+    # Here we define columns for the table person
+    # Notice that each column is also a normal Python instance attribute.
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('user_id.id'))
+    comments = relationship("Comments", backref="comments")
+    medios = relationship("medios", backref="medios")
+
+
 
 # class Address(Base):
 #     __tablename__ = 'address'
